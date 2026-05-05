@@ -1,0 +1,46 @@
+# ── Large data / raw captures ────────────────────────────────────────────────
+scenes/*/raw/
+scenes/*/processed/
+scenes/*/nerfstudio_data/
+scenes/*/nerfstudio_outputs/
+scenes/*/exports/
+scenes/*.zip
+scenes/*.z01
+scenes/*.z02
+scenes/*.z03
+scenes/*.z04
+scenes/*.z05
+
+# Keep metrics and the pre-baked COLMAP data for gerrard-hall test scene
+!scenes/gerrard-hall/gerrard-hall/
+!scenes/gerrard-hall/metrics/
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+env/
+*.egg-info/
+
+# ── Node / Web ───────────────────────────────────────────────────────────────
+web/node_modules/
+web/dist/
+
+# ── Nerfstudio / ML outputs ──────────────────────────────────────────────────
+outputs/
+nerfstudio_outputs/
+*.ckpt
+*.pt
+*.pth
+wandb/
+
+# ── OS / Editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# ── Experiment manifest (fill-in manually, not for source control) ───────────
+experiments.json

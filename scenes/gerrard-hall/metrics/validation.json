@@ -1,0 +1,318 @@
+{
+  "input_dir": "scenes\\gerrard-hall\\raw",
+  "num_images": 30,
+  "num_valid": 30,
+  "num_unreadable": 0,
+  "average_resolution": [
+    5616,
+    3744
+  ],
+  "blur_score_mean": 150.72,
+  "blur_score_min": 48.81,
+  "brightness_mean": 106.04,
+  "blurry_images": [
+    "IMG_2338.JPG",
+    "IMG_2342.JPG",
+    "IMG_2345.JPG",
+    "IMG_2347.JPG",
+    "IMG_2354.JPG",
+    "IMG_2355.JPG"
+  ],
+  "dark_images": [],
+  "overexposed_images": [],
+  "low_resolution_images": [],
+  "warnings": [
+    "6 image(s) appear blurry (blur score < 100.0)."
+  ],
+  "recommendations": [
+    "Capture 50\u2013100 overlapping images for stable reconstruction.",
+    "Move slowly and smoothly around the scene in a circular or arc path.",
+    "Ensure 60\u201380% overlap between consecutive frames.",
+    "Avoid blank walls, mirrors, glass, and moving objects.",
+    "Shoot in good, consistent lighting \u2014 avoid harsh shadows or mixed light sources."
+  ],
+  "per_image": [
+    {
+      "file": "IMG_2331.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 117.98,
+      "brightness": 95.54,
+      "issues": []
+    },
+    {
+      "file": "IMG_2332.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 129.56,
+      "brightness": 97.52,
+      "issues": []
+    },
+    {
+      "file": "IMG_2333.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 296.32,
+      "brightness": 107.31,
+      "issues": []
+    },
+    {
+      "file": "IMG_2334.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 296.89,
+      "brightness": 116.8,
+      "issues": []
+    },
+    {
+      "file": "IMG_2335.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 166.5,
+      "brightness": 121.2,
+      "issues": []
+    },
+    {
+      "file": "IMG_2336.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 152.14,
+      "brightness": 122.2,
+      "issues": []
+    },
+    {
+      "file": "IMG_2337.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 148.86,
+      "brightness": 123.91,
+      "issues": []
+    },
+    {
+      "file": "IMG_2338.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 88.33,
+      "brightness": 119.67,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2339.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 173.53,
+      "brightness": 108.77,
+      "issues": []
+    },
+    {
+      "file": "IMG_2340.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 107.61,
+      "brightness": 100.31,
+      "issues": []
+    },
+    {
+      "file": "IMG_2341.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 138.04,
+      "brightness": 97.97,
+      "issues": []
+    },
+    {
+      "file": "IMG_2342.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 81.32,
+      "brightness": 96.52,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2343.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 158.22,
+      "brightness": 97.52,
+      "issues": []
+    },
+    {
+      "file": "IMG_2344.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 128.79,
+      "brightness": 98.97,
+      "issues": []
+    },
+    {
+      "file": "IMG_2345.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 55.75,
+      "brightness": 98.14,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2346.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 120.3,
+      "brightness": 105.41,
+      "issues": []
+    },
+    {
+      "file": "IMG_2347.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 48.81,
+      "brightness": 112.67,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2348.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 150.08,
+      "brightness": 106.89,
+      "issues": []
+    },
+    {
+      "file": "IMG_2349.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 183.39,
+      "brightness": 101.3,
+      "issues": []
+    },
+    {
+      "file": "IMG_2350.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 145.76,
+      "brightness": 97.93,
+      "issues": []
+    },
+    {
+      "file": "IMG_2351.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 206.97,
+      "brightness": 107.52,
+      "issues": []
+    },
+    {
+      "file": "IMG_2352.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 200.67,
+      "brightness": 103.83,
+      "issues": []
+    },
+    {
+      "file": "IMG_2353.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 218.36,
+      "brightness": 105.94,
+      "issues": []
+    },
+    {
+      "file": "IMG_2354.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 80.95,
+      "brightness": 102.7,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2355.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 53.65,
+      "brightness": 120.15,
+      "issues": [
+        "blurry"
+      ]
+    },
+    {
+      "file": "IMG_2356.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 153.98,
+      "brightness": 109.16,
+      "issues": []
+    },
+    {
+      "file": "IMG_2357.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 162.66,
+      "brightness": 100.7,
+      "issues": []
+    },
+    {
+      "file": "IMG_2358.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 124.39,
+      "brightness": 106.07,
+      "issues": []
+    },
+    {
+      "file": "IMG_2359.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 180.14,
+      "brightness": 102.88,
+      "issues": []
+    },
+    {
+      "file": "IMG_2360.JPG",
+      "valid": true,
+      "width": 5616,
+      "height": 3744,
+      "blur_score": 251.55,
+      "brightness": 95.79,
+      "issues": []
+    }
+  ]
+}
