@@ -11,8 +11,19 @@ scenes/*.z03
 scenes/*.z04
 scenes/*.z05
 
-# Keep metrics and the pre-baked COLMAP data for gerrard-hall test scene
-!scenes/gerrard-hall/gerrard-hall/
+# All image files in scenes are large — never commit them
+scenes/**/*.JPG
+scenes/**/*.jpg
+scenes/**/*.jpeg
+scenes/**/*.JPEG
+scenes/**/*.png
+scenes/**/*.PNG
+scenes/**/*.heic
+scenes/**/*.HEIC
+scenes/**/*.db
+
+# Keep the pre-baked COLMAP sparse text files and validation metrics
+!scenes/gerrard-hall/gerrard-hall/sparse/
 !scenes/gerrard-hall/metrics/
 
 # ── Python ───────────────────────────────────────────────────────────────────
