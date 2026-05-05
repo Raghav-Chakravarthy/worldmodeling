@@ -1,0 +1,79 @@
+// Replace viewer_url with your actual SuperSplat published links after export.
+export const scenes = [
+  {
+    id: "desk_scene",
+    title: "Desk Scene",
+    description: "A cluttered desk with books, a lamp, and objects at multiple depths. High texture — our best reconstruction.",
+    difficulty: "Easy",
+    difficultyColor: "text-green-600 bg-green-50",
+    images: 50,
+    lighting: "Bright indoor",
+    texture: "High",
+    score: 4,
+    artifacts: "Minor floaters near edges",
+    fileSizeMb: 42,
+    viewer_url: "#",  // Replace with SuperSplat published URL
+    thumbnail: null,
+  },
+  {
+    id: "hallway_scene",
+    title: "Hallway Scene",
+    description: "A medium-length hallway with doors and framed art. Tests reconstruction over a larger, less cluttered space.",
+    difficulty: "Medium",
+    difficultyColor: "text-yellow-600 bg-yellow-50",
+    images: 50,
+    lighting: "Mixed indoor",
+    texture: "Medium",
+    score: 3,
+    artifacts: "Ceiling gaps, some floaters",
+    fileSizeMb: 28,
+    viewer_url: "#",  // Replace with SuperSplat published URL
+    thumbnail: null,
+  },
+  {
+    id: "failure_scene",
+    title: "Blank Wall (Failure Case)",
+    description: "A plain white wall with minimal texture. SfM cannot establish reliable feature matches — reconstruction fails entirely.",
+    difficulty: "Hard / Failure",
+    difficultyColor: "text-red-600 bg-red-50",
+    images: 30,
+    lighting: "Bright indoor",
+    texture: "Very Low",
+    score: 1,
+    artifacts: "COLMAP pose estimation failed — no splat produced",
+    fileSizeMb: 0,
+    viewer_url: null,
+    thumbnail: null,
+  },
+];
+
+export const experiments = [
+  {
+    variable: "Image Count",
+    low: "20 images → Incomplete geometry, many gaps",
+    high: "100 images → Diminishing returns, higher compute",
+    sweet_spot: "50–70 images for most indoor scenes",
+    finding: "More images improve coverage but only if they add distinct viewpoints. Near-duplicates hurt efficiency without improving quality.",
+  },
+  {
+    variable: "Texture Level",
+    low: "Blank wall → SfM fails entirely",
+    high: "Cluttered desk → Clean reconstruction",
+    sweet_spot: "Any scene with distinctive features at multiple depths",
+    finding: "Feature matching is the bottleneck. Low-texture regions produce no sparse points and prevent camera pose estimation.",
+  },
+  {
+    variable: "Lighting",
+    low: "Dim room → Blurry images, few features",
+    high: "Bright daylight → Clear features, fast matching",
+    sweet_spot: "Consistent bright indoor or outdoor (overcast) light",
+    finding: "Dark images increase noise and reduce feature count. Mixed lighting creates color inconsistencies in the final splat.",
+  },
+  {
+    variable: "Capture Path",
+    low: "Random disconnected shots → Fragmented reconstruction",
+    high: "Smooth circular arc with 70% overlap → Stable, complete geometry",
+    sweet_spot: "Slow, deliberate arc or figure-8 path around the scene",
+    finding: "COLMAP relies on sequential image similarity to initialize. Disconnected viewpoints often cause partial or failed reconstruction.",
+  },
+];
