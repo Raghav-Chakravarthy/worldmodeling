@@ -14,8 +14,8 @@ export const scenes = [
     score: 4,
     artifacts: "Minor floaters near edges",
     fileSizeMb: 42,
-    splat_url: "https://huggingface.co/datasets/dylanebert/3dgs/resolve/main/bonsai/bonsai-7k-mini.splat",
-    demo_label: "Demo: Mip-NeRF 360 'bonsai' reference reconstruction (placeholder until our desk capture is trained)",
+    splat_url: "https://huggingface.co/datasets/vcraghav/photowalk-splats/resolve/main/splat.ply",
+    demo_label: "Gerrard Hall — trained with Nerfstudio Splatfacto (100 images)",
     thumbnail: null,
   },
   {

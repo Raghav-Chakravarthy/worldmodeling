@@ -3,131 +3,176 @@
 ---
 
 ## Abstract (~150 words)
-- What: a practical pipeline for converting casual phone images into browser-viewable walkable 3D scenes
-- How: image quality validation → COLMAP Structure-from-Motion → 3D Gaussian Splatting via Nerfstudio Splatfacto → SuperSplat browser viewer
-- Contribution: working end-to-end system + systematic evaluation of capture factors
-- Key finding: favorable conditions (50+ images, good lighting, textured scene, smooth path) produce convincing interactive scenes; low texture and poor overlap remain hard failure cases
+- What: an empirical study of 3D Gaussian Splatting reconstruction quality under casual phone capture conditions, with a browser-based interactive viewer
+- How: capture condition study (image count, lighting, texture, path) + failure taxonomy + DUSt3R comparison + browser deployment
+- Contribution:
+  1. Systematic evaluation of how capture quality factors affect 3DGS reconstruction — filling a gap in existing literature that only evaluates controlled captures
+  2. A documented failure case taxonomy explaining when and why reconstruction fails
+  3. A comparison between full COLMAP+Splatfacto pipeline and few-shot DUSt3R at varying image counts
+  4. A browser-based viewer making 3DGS accessible without GPU or installation
+- Key finding: capture quality at collection time dominates reconstruction quality more than algorithmic choice; DUSt3R closes the gap significantly below 20 images
 
 ---
 
 ## 1. Introduction (~0.5 page)
-- Growing interest in casual 3D capture with consumer devices
-- Existing tools are powerful but fragmented — no single beginner-friendly pipeline
-- We build PhotoWalk: validate → reconstruct → browse
-- State the three research questions:
-  1. How many images does a casual capture need?
-  2. What scene and lighting properties predict reconstruction success?
-  3. Can the result be hosted and explored in a browser without specialized software?
+- 3DGS (Kerbl et al. 2023) achieves real-time photorealistic rendering but assumes controlled, high-quality image capture
+- In practice: phone cameras, casual movement, imperfect lighting — does 3DGS still work?
+- Existing papers evaluate on controlled benchmark datasets (Tanks & Temples, Mip-NeRF 360) — not casual phone captures
+- Gap: no systematic study of how capture conditions affect reconstruction quality in casual settings
+- We fill this gap with controlled experiments across image count, lighting, texture, and capture path
+- Secondary contribution: few-shot alternative (DUSt3R) that skips COLMAP entirely — when is it good enough?
+- Research questions:
+  1. How does image count, lighting, texture, and capture path affect 3DGS reconstruction quality?
+  2. What are the failure modes and can they be predicted before reconstruction?
+  3. At what image count does DUSt3R become competitive with the full COLMAP+Splatfacto pipeline?
+  4. Can the reconstructed scene be deployed in a browser accessible to anyone?
 
 ---
 
 ## 2. Related Work (~1 page)
 
 ### 2.1 Structure from Motion
-- Multi-view geometry: estimating camera poses from feature correspondences
-- COLMAP [Schönberger & Frahm 2016]: general-purpose SfM/MVS pipeline; the standard baseline
+- Classical multi-view geometry: estimating camera poses from feature correspondences across images
+- COLMAP [Schönberger & Frahm, CVPR 2016]: general-purpose SfM/MVS pipeline, the standard baseline for pose estimation
+- Limitation: requires many images with sufficient overlap; fails on low-texture scenes
 
 ### 2.2 Neural Radiance Fields
-- NeRF [Mildenhall et al. 2020]: neural implicit scene representation, high quality but slow to render
-- Relevant because 3DGS is often framed as a successor
+- NeRF [Mildenhall et al., ECCV 2020]: neural implicit scene representation for novel view synthesis
+- High quality but slow (~minutes per frame) — not suitable for real-time browser viewing
+- Motivates 3DGS as a faster, explicit alternative
 
 ### 2.3 3D Gaussian Splatting
-- Kerbl et al. 2023: represent scene as optimized 3D Gaussians, render via visibility-aware splatting
-- Real-time performance; starts from COLMAP sparse points; can be exported as .ply
+- Kerbl et al. [SIGGRAPH 2023]: represent scene as optimized 3D Gaussians, render via visibility-aware splatting
+- Real-time performance (≥30 FPS at 1080p); initialized from COLMAP sparse points
 - Nerfstudio Splatfacto: training implementation used in this project
+- Key limitation: inherits COLMAP's failure modes — low texture, insufficient overlap, moving objects
 
-### 2.4 Browser-Based 3D Visualization
-- SuperSplat (PlayCanvas): browser editor and publisher for Gaussian splat .ply files
-- Three.js gaussian-splatting libraries: alternative lightweight viewer
-- WebGL/WebGPU as the rendering substrate
+### 2.4 Few-Shot and Pose-Free Reconstruction
+- DUSt3R [Wang et al., CVPR 2024]: end-to-end 3D reconstruction from as few as 2 images, no camera poses required
+- MASt3R [Leroy et al., 2024]: successor to DUSt3R with improved matching
+- Key difference from COLMAP: jointly estimates geometry and poses in a single forward pass
+- Relevant because it offers a low-barrier alternative for casual capture with few images
+
+### 2.5 Browser-Based 3D Visualization
+- gsplat: WebGL Gaussian splat renderer enabling in-browser viewing of .ply/.splat files
+- Enables deployment without GPU, Python, or specialized software — key for accessibility
 
 ---
 
 ## 3. Method (~1.5 pages)
 
-### 3.1 Image Capture Protocol
-- Device: phone camera (specify model)
-- Path: smooth arc or figure-8 around the scene
-- Overlap: 60–80% between consecutive frames
-- Target: 50–100 images per scene
+### 3.1 Capture Protocol
+- Device: phone camera (specify model and resolution)
+- Path: smooth arc or figure-8 around the scene, one step per frame
+- Overlap target: 60–80% between consecutive frames
+- Image counts tested: 10, 20, 50, 100 per scene
 
-### 3.2 Image Quality Validation (scripts/validate_images.py)
-- Blur detection: Laplacian variance (threshold: 100)
-- Brightness: mean grayscale (reject < 40 or > 220)
-- Resolution check: minimum 1280×720
-- Output: JSON report with per-image metrics and scene-level warnings
+### 3.2 Pre-Capture Validation (validate_images.py)
+- Blur: Laplacian variance (threshold 100) — predicts SIFT feature density
+- Brightness: mean grayscale (reject < 40 dark, > 220 overexposed)
+- Resolution: minimum 1280×720
+- Count warning: < 30 images flagged as insufficient
+- Output: JSON report + HTML summary; runs before reconstruction to catch bad captures early
 
-### 3.3 Preprocessing (scripts/preprocess_images.py)
+### 3.3 Preprocessing (preprocess_images.py)
 - Consistent renaming: frame_0001.jpg, frame_0002.jpg …
 - Optional downsampling (--max-size 1920) to reduce GPU memory
 
-### 3.4 Camera Pose Estimation (COLMAP via ns-process-data)
-- Exhaustive or sequential feature matching (SIFT)
-- Bundle adjustment for sparse 3D point cloud
-- Output: transforms.json with camera poses
+### 3.4 Full Pipeline: COLMAP + Splatfacto
+- ns-process-data: SIFT feature extraction → exhaustive matching → bundle adjustment → transforms.json
+- ns-train splatfacto: initialize Gaussians from sparse points, optimize position/covariance/opacity/SH color
+- ns-export gaussian-splat: export .ply for browser viewer
+- Metric collected: registered cameras, training loss curve, qualitative score 1–5
 
-### 3.5 Gaussian Splat Reconstruction (Nerfstudio Splatfacto)
-- Initialize 3D Gaussians from COLMAP sparse points
-- Optimize via differentiable rendering: position, covariance, opacity, spherical harmonics color
-- Training: ~30k iterations on GPU
+### 3.5 Few-Shot Alternative: DUSt3R
+- Run DUSt3R on same scenes at 5, 10, 20 image subsets
+- No COLMAP, no pose estimation — single forward pass produces point cloud
+- Compare output quality vs. full pipeline at matching image counts
+- Research question: below what image count does DUSt3R become competitive?
 
-### 3.6 Export and Browser Hosting (SuperSplat)
-- Export: ns-export gaussian-splat → .ply file
-- SuperSplat: load .ply, optimize scene, publish or export self-hostable viewer
-- Landing page: React + Vite + Tailwind with scene gallery and experiment table
+### 3.6 Browser Deployment
+- .ply hosted on HuggingFace (CORS-enabled CDN)
+- gsplat WebGL viewer embedded in React landing page
+- Orbit controls, progress bar, mobile-compatible
+- No GPU, no installation — anyone with a browser can explore the scene
 
 ---
 
 ## 4. Experiments (~1 page)
 
 ### 4.1 Scenes
-| Scene | Condition | Images | Lighting | Texture |
-|---|---|---|---|---|
-| Desk | Easy | 20 / 50 / 100 | Bright | High |
-| Hallway | Medium | 50 | Mixed | Medium |
-| Blank wall | Failure | 30 | Bright | Very low |
+| Scene | Type | Purpose |
+|---|---|---|
+| Desk/shelf | High texture, cluttered | Baseline success case |
+| Hallway/room | Medium texture, larger space | Mid-difficulty case |
+| Blank wall | Very low texture | Expected failure |
+| Dim desk | Same as desk, lights off | Lighting experiment |
+| Random shots | Same scene, disconnected photos | Path experiment |
 
-### 4.2 Variables Tested
-1. **Image count** — 20 vs 50 vs 100 images of the desk scene
-2. **Texture** — textured desk vs blank wall
-3. **Lighting** — bright room vs dimmed room (same scene)
-4. **Capture path** — smooth arc vs random disconnected shots
+### 4.2 Experiment 1 — Image Count (Full Pipeline)
+- Same scene, vary images: 10 / 20 / 50 / 100
+- Metric: registered cameras, qualitative score, splat file size, browser load time
+- Expected finding: below ~30 images reconstruction degrades significantly
 
-### 4.3 Metrics
-- COLMAP success / failure (binary)
-- Number of registered cameras (from COLMAP log)
-- Qualitative score 1–5 (visual inspection of splat)
-- Splat file size (MB)
-- Browser load time (seconds)
+### 4.3 Experiment 2 — Texture Level
+- High texture (desk) vs. very low texture (blank wall)
+- Metric: COLMAP registered cameras (binary success/fail), qualitative score
+- Expected finding: low texture always fails at COLMAP stage
+
+### 4.4 Experiment 3 — Lighting
+- Bright vs. dim capture of same scene
+- Metric: blur scores from validator, registered cameras, qualitative score
+- Expected finding: dim → higher blur scores → fewer registered cameras
+
+### 4.5 Experiment 4 — Capture Path
+- Smooth arc vs. random disconnected shots (same scene, same count)
+- Metric: registered cameras, fragmentation in COLMAP output, qualitative score
+- Expected finding: random shots produce fragmented or failed reconstruction
+
+### 4.6 Experiment 5 — DUSt3R vs. Full Pipeline (Key Experiment)
+- Same scenes, same image subsets: 5 / 10 / 20 images
+- DUSt3R output vs. Splatfacto output at matching counts
+- Metric: qualitative score, point cloud density, completeness
+- Expected finding: DUSt3R competitive or better below ~15 images; full pipeline wins above ~30
+- This is the novel comparison — not done in either paper
 
 ---
 
 ## 5. Results (~0.5 page)
-- Summary table: [see report/experiments.md]
-- Image count: 50 images sufficient for desk scene; 20 images leaves geometry gaps
-- Texture: blank wall always fails; cluttered scene always succeeds
-- Lighting: dim images reduce registered cameras by ~30%
-- Capture path: smooth arc reconstructs reliably; random shots fragment geometry
+- Summary table across all experiments with real numbers
+- Capture quality finding: blur score and registered camera count are the best predictors of output quality
+- Image count finding: 50 images is the practical minimum for room-scale scenes
+- DUSt3R finding: [fill in after running]
+- Browser performance: load time vs. file size across scenes
 
 ---
 
-## 6. Failure Cases (~0.25 page)
-- Low-texture surfaces: no SIFT keypoints → COLMAP cannot initialize
-- Reflective objects: inconsistent appearance across views → floaters
-- Moving objects: violates static scene assumption → ghosting artifacts
-- Insufficient overlap: disconnected graph in COLMAP → partial reconstruction
+## 6. Failure Case Taxonomy (~0.5 page)
+Systematic categorization — each with image example and explanation:
+
+| Failure Mode | Cause | Detection | Mitigation |
+|---|---|---|---|
+| COLMAP cannot initialize | Low texture — no SIFT keypoints | Blur/texture pre-check | Choose scenes with objects |
+| Partial reconstruction | Insufficient overlap between views | Camera count < image count | Slower capture, more overlap |
+| Floaters | Inconsistent appearance (reflections) | Visual inspection | Avoid mirrors, glass |
+| Ghosting | Moving objects during capture | Temporal consistency check | Clear scene before capture |
+| Color artifacts | Mixed lighting across frames | Brightness variance check | Consistent lighting |
+
+This taxonomy is a practical contribution — not present in existing 3DGS papers.
 
 ---
 
 ## 7. Limitations (~0.25 page)
-- No quantitative 3D ground truth (no LiDAR reference)
-- GPU required for Splatfacto training (~1–3 hours per scene on consumer GPU)
-- HEIC images from iPhone require conversion (handled in preprocessing)
-- SuperSplat hosting subject to file size limits
+- No quantitative ground truth (PSNR/SSIM requires reference images from exact same viewpoints)
+- DUSt3R comparison is qualitative — quantitative comparison requires reference geometry
+- GPU required for Splatfacto training (~45–90 min per scene on T4)
+- 3DGS assumes static scene — dynamic objects not handled
 
 ---
 
 ## 8. Conclusion (~0.25 page)
-- PhotoWalk shows casual phone capture can produce interactive browser-viewable 3D scenes
-- Image quality at capture time is the dominant factor — more so than algorithm choice
-- Future work: mobile-friendly training, depth-sensor fusion, dynamic scene handling
+- Casual phone capture can produce high-quality interactive 3D scenes under the right conditions
+- Capture quality factors (texture, overlap, lighting) predict success better than image count alone
+- DUSt3R is a viable alternative for low-image-count scenarios, especially below 20 images
+- Browser deployment removes the GPU/installation barrier — making 3DGS practically accessible
+- Future work: video input for frame extraction, user-upload pipeline, mobile-optimized training
