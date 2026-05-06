@@ -1,4 +1,6 @@
-// Replace viewer_url with your actual SuperSplat published links after export.
+// splat_url: publicly hosted .splat / .ply we stream into the in-browser viewer.
+// Until the user's own captures are trained and uploaded, the placeholder scenes
+// load reference reconstructions hosted on huggingface.co (CORS-enabled CDN).
 export const scenes = [
   {
     id: "desk_scene",
@@ -12,7 +14,8 @@ export const scenes = [
     score: 4,
     artifacts: "Minor floaters near edges",
     fileSizeMb: 42,
-    viewer_url: "#",  // Replace with SuperSplat published URL
+    splat_url: "https://huggingface.co/datasets/dylanebert/3dgs/resolve/main/bonsai/bonsai-7k-mini.splat",
+    demo_label: "Demo: Mip-NeRF 360 'bonsai' reference reconstruction (placeholder until our desk capture is trained)",
     thumbnail: null,
   },
   {
@@ -27,7 +30,8 @@ export const scenes = [
     score: 3,
     artifacts: "Ceiling gaps, some floaters",
     fileSizeMb: 28,
-    viewer_url: "#",  // Replace with SuperSplat published URL
+    splat_url: "https://huggingface.co/datasets/dylanebert/3dgs/resolve/main/bicycle/bicycle-7k-mini.splat",
+    demo_label: "Demo: Mip-NeRF 360 'bicycle' reference reconstruction (placeholder until our hallway capture is trained)",
     thumbnail: null,
   },
   {
@@ -42,7 +46,8 @@ export const scenes = [
     score: 1,
     artifacts: "COLMAP pose estimation failed — no splat produced",
     fileSizeMb: 0,
-    viewer_url: null,
+    splat_url: null,
+    demo_label: null,
     thumbnail: null,
   },
 ];

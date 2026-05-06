@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { scenes, experiments } from "./data/scenes";
+import SceneViewerModal from "./components/SceneViewerModal";
 
 // ── Icons (inline SVG to avoid a dependency) ────────────────────────────────
 const IconCamera = () => (
@@ -20,6 +22,15 @@ const IconExternal = () => (
   <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
       d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+  </svg>
+);
+
+const IconPlay = () => (
+  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
 );
 
@@ -125,15 +136,31 @@ function ScoreStars({ score }) {
   );
 }
 
-function SceneCard({ scene }) {
+function SceneCard({ scene, onOpen }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-      <div className="bg-slate-100 h-44 flex items-center justify-center text-slate-400">
+      <button
+        type="button"
+        onClick={() => scene.splat_url && onOpen(scene)}
+        disabled={!scene.splat_url}
+        className={`bg-slate-900 h-44 flex items-center justify-center text-slate-400 relative group ${scene.splat_url ? "cursor-pointer hover:bg-slate-800" : "cursor-not-allowed"}`}
+      >
         {scene.thumbnail
           ? <img src={scene.thumbnail} alt={scene.title} className="w-full h-full object-cover" />
-          : <span className="text-sm">[Scene thumbnail]</span>
+          : (
+            <div className="text-center text-slate-300">
+              {scene.splat_url ? (
+                <>
+                  <div className="text-3xl mb-1">▶</div>
+                  <div className="text-xs uppercase tracking-wide">Click to load 3D scene</div>
+                </>
+              ) : (
+                <span className="text-sm text-red-300/70">No reconstruction available</span>
+              )}
+            </div>
+          )
         }
-      </div>
+      </button>
       <div className="p-5 flex flex-col gap-3 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-gray-900">{scene.title}</h3>
@@ -156,15 +183,14 @@ function SceneCard({ scene }) {
           <p className="text-xs text-gray-400 italic">Artifacts: {scene.artifacts}</p>
         )}
         <div className="mt-auto pt-2">
-          {scene.viewer_url && scene.viewer_url !== "#" ? (
-            <a href={scene.viewer_url} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors">
-              Open in SuperSplat <IconExternal />
-            </a>
-          ) : scene.viewer_url === "#" ? (
-            <span className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-400 rounded-lg text-sm">
-              Viewer link coming soon
-            </span>
+          {scene.splat_url ? (
+            <button
+              type="button"
+              onClick={() => onOpen(scene)}
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors"
+            >
+              <IconPlay /> Explore in 3D
+            </button>
           ) : (
             <span className="inline-flex items-center px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm">
               Reconstruction failed — see failure analysis
@@ -176,16 +202,17 @@ function SceneCard({ scene }) {
   );
 }
 
-function Scenes() {
+function Scenes({ onOpen }) {
   return (
     <section id="scenes" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Reconstructed Scenes</h2>
         <p className="text-gray-600 mb-10 text-sm">
           Three scenes chosen to span the difficulty spectrum and expose reconstruction failure modes.
+          Click any scene to load its 3D Gaussian Splat reconstruction directly in the browser.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {scenes.map(s => <SceneCard key={s.id} scene={s} />)}
+          {scenes.map(s => <SceneCard key={s.id} scene={s} onOpen={onOpen} />)}
         </div>
       </div>
     </section>
@@ -305,15 +332,22 @@ function Footer() {
 
 // ── Root ─────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [activeScene, setActiveScene] = useState(null);
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
       <NavBar />
       <Hero />
       <Pipeline />
-      <Scenes />
+      <Scenes onOpen={setActiveScene} />
       <Experiments />
       <CaptureGuide />
       <Footer />
+      {activeScene && (
+        <SceneViewerModal
+          scene={activeScene}
+          onClose={() => setActiveScene(null)}
+        />
+      )}
     </div>
   );
 }
