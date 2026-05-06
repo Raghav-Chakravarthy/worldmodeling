@@ -1,7 +1,7 @@
 # PhotoWalk
 
 **Browser-Based Walkable 3D Scene Reconstruction from Phone Images**
-By: Raghav Chakravarthy, Prabhat Jain, Dhruva Chakravarthi, ...
+By: Raghav Chakravarthy, Prabhat Jain, Dhruva Chakravarthi, and Sai Prabhu
 
 > Computer Vision Final Project
 
