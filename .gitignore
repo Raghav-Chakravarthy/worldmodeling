@@ -46,6 +46,12 @@ nerfstudio_outputs/
 *.pth
 wandb/
 
+# ── Splat files (large — host externally, don't commit) ──────────────────────
+*.ply
+*.splat
+web/public/*.ply
+web/public/*.splat
+
 # ── OS / Editor ──────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db

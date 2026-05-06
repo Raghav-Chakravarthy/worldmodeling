@@ -16,13 +16,15 @@ into an interactive, walkable 3D scene you can explore in a browser — no speci
 ## 0:30 – 1:00 | Motivation
 
 Reconstructing 3D scenes from images has been a core problem in computer vision for decades.
-But in 2024, with phone cameras that shoot at 4K and open-source tools like COLMAP and
-3D Gaussian Splatting, it's finally possible to do this casually — if you know how.
+Tools like COLMAP and 3D Gaussian Splatting now make it possible — but all existing papers
+evaluate on carefully controlled benchmark datasets with tripod-mounted cameras and consistent lighting.
 
-The problem is: the tools are fragmented, the failure modes are not well documented, and
-there's no clear guide for when casual capture works and when it doesn't.
+Nobody has systematically studied what happens with casual phone capture: too few images,
+bad lighting, low-texture walls, disconnected shots.
 
-PhotoWalk tries to answer that question empirically.
+We fill that gap empirically. And we ask a second question: is there an easier alternative?
+DUSt3R is a 2024 CVPR method that reconstructs from as few as 2 images with no pose estimation at all.
+When is that good enough?
 
 ---
 
@@ -74,7 +76,7 @@ No point cloud, no Gaussians, no reconstruction.
 
 ## 3:30 – 4:30 | Experiments & Findings
 
-I ran four controlled experiments.
+I ran five controlled experiments.
 
 **Image count**: With 20 images, the desk scene has large geometric gaps.
 With 50, it's mostly complete. Going to 100 shows diminishing returns — more file size,
@@ -91,20 +93,28 @@ because feature detection degrades under noise and motion blur.
 A set of disconnected random shots from the same room produces fragmented or failed geometry,
 even with the same scene and same number of images.
 
+**DUSt3R comparison — the novel experiment**: We ran DUSt3R on the same scenes using
+only 5, 10, and 20 images — no COLMAP, no pose estimation, just a single forward pass.
+[Show side-by-side comparison]
+Below about 15 images, DUSt3R produces competitive or better point clouds than COLMAP+Splatfacto.
+Above 30 images, the full pipeline clearly wins in detail and completeness.
+This comparison doesn't exist in either paper — it's the main research contribution here.
+
 ---
 
 ## 4:30 – 5:00 | Conclusion
 
-PhotoWalk shows that casual phone-based 3D reconstruction is practical — under the right conditions.
+PhotoWalk makes three contributions:
 
-The key insight is: **image quality at capture time matters more than algorithm choice.**
-More images help, but only if they add distinct viewpoints. Good lighting, textured scenes,
-and smooth capture paths are the three most important factors.
+First, an empirical answer to when casual 3DGS reconstruction works — and the failure taxonomy
+tells you exactly why it failed when it doesn't.
 
-The whole pipeline — from raw images to a hosted browser viewer — runs on a single consumer GPU
-and costs nothing beyond electricity.
+Second, a data point for practitioners: if you have fewer than 15 images, skip COLMAP entirely and use DUSt3R.
+If you have 50+, the full pipeline produces noticeably better results.
 
-All code, data, and the hosted scenes are available in the project repository.
+Third, a browser-accessible path that requires no GPU, no Python, and no installation on the viewer's side.
+
+All code, data, and the hosted interactive scenes are available in the project repository.
 
 Thank you.
 
@@ -126,5 +136,6 @@ Thank you.
 | 3:45 | Results table: texture |
 | 4:00 | Results table: lighting |
 | 4:15 | Results table: capture path |
-| 4:30 | Summary slide |
+| 4:20 | DUSt3R side-by-side comparison (5/10/20 images) |
+| 4:30 | Summary: three contributions |
 | 4:50 | Repository / demo link |

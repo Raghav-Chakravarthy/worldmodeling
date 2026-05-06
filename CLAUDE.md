@@ -14,9 +14,10 @@ walkable 3D scenes using Structure-from-Motion + 3D Gaussian Splatting.
 - **Deliverables:** 6-page NeurIPS-format report + 5-minute video demo
 
 The main contribution is NOT inventing a new algorithm. It is:
-1. A working end-to-end pipeline with image quality validation
-2. A hosted browser-based 3D viewer
-3. Systematic experiments showing when reconstruction succeeds and fails
+1. **Empirical capture condition study** — systematic evaluation of how image count, texture, lighting, and capture path affect 3DGS quality (gap in existing literature: all benchmarks use controlled captures)
+2. **Failure case taxonomy** — documented, reproducible failure modes with detection and mitigation (not present in existing 3DGS papers)
+3. **DUSt3R vs full pipeline comparison** — novel head-to-head: at what image count does DUSt3R (pose-free, 2+ images) become competitive with COLMAP+Splatfacto (50+ images)?
+4. **Browser accessibility** — cloud training (Colab) + HuggingFace hosting + WebGL viewer creates a GPU-free path for end users
 
 ---
 
@@ -27,7 +28,8 @@ The main contribution is NOT inventing a new algorithm. It is:
 | Image validation + preprocessing | Python + OpenCV (`scripts/`) |
 | Camera pose estimation | COLMAP (via Nerfstudio `ns-process-data`) |
 | 3D reconstruction | Nerfstudio Splatfacto (3D Gaussian Splatting) |
-| Browser viewer | SuperSplat (playcanvas.com/supersplat) |
+| Browser viewer | gsplat (WebGL, embedded in React landing page) |
+| Few-shot alternative | DUSt3R / MASt3R (pose-free reconstruction, no COLMAP) |
 | Landing page | React + Vite + Tailwind (`web/`) |
 | Report | NeurIPS format, outline in `report/outline.md` |
 
@@ -114,16 +116,33 @@ After training: update `web/src/data/scenes.js` with real SuperSplat viewer URLs
 
 ## Experiments to run (core deliverable)
 
-Vary these four factors and record results in `experiments.json`:
+### Experiments 1–4: Capture condition study (full COLMAP+Splatfacto pipeline)
 
-| Variable | Levels |
-|---|---|
-| Image count | 20 / 50 / 100 images of same scene |
-| Texture | High (cluttered desk) vs Very Low (blank wall) |
-| Lighting | Bright vs Dim (same scene) |
-| Capture path | Smooth arc vs Random disconnected shots |
+| Experiment | Variable | Levels |
+|---|---|---|
+| 1 | Image count | 10 / 20 / 50 / 100 images of same scene |
+| 2 | Texture | High (cluttered desk) vs Very Low (blank wall) |
+| 3 | Lighting | Bright vs Dim (same scene) |
+| 4 | Capture path | Smooth arc vs Random disconnected shots |
 
-Record for each: `reconstruction_success`, `major_artifacts`, `viewer_file_size_mb`, `qualitative_score` (1–5).
+Record for each: `registered_cameras`, `reconstruction_success`, `qualitative_score` (1–5), `file_size_mb`.
+
+### Experiment 5: DUSt3R vs Full Pipeline (KEY — novel contribution)
+
+- Run DUSt3R on same scenes using **5 / 10 / 20 image subsets** (no COLMAP needed)
+- Compare output quality vs. Splatfacto at same image counts
+- Research question: **below what image count does DUSt3R become competitive?**
+- Expected: DUSt3R wins below ~15 images; Splatfacto wins above ~30
+- Install: `pip install dust3r` (runs on Colab T4)
+
+### Failure taxonomy (Section 6 of report)
+
+Document each failure mode with an image example:
+- COLMAP cannot initialize (low texture, no SIFT keypoints)
+- Partial reconstruction (insufficient overlap)
+- Floaters (reflections/transparency)
+- Ghosting (moving objects)
+- Color artifacts (mixed lighting)
 
 ---
 
@@ -138,6 +157,8 @@ Key citations to include:
 - NeRF — Mildenhall et al., ECCV 2020
 - 3D Gaussian Splatting — Kerbl et al., SIGGRAPH 2023
 - Nerfstudio — Tancik et al., SIGGRAPH 2023
+- DUSt3R — Wang et al., CVPR 2024
+- MASt3R — Leroy et al., 2024
 
 ---
 

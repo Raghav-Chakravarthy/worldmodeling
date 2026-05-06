@@ -4,6 +4,16 @@
 
 ---
 
+## Research framing (updated)
+
+The project is an **empirical study** — not a new algorithm. The novel contributions are:
+1. Systematic capture condition study (image count, texture, lighting, path) — gap in existing literature
+2. Failure case taxonomy with detection + mitigation for each mode
+3. **DUSt3R vs full pipeline comparison** (Experiment 5) — neither the DUSt3R nor the 3DGS paper makes this comparison
+4. Browser-accessible end-to-end path (Colab + HuggingFace + gsplat WebGL viewer)
+
+---
+
 ## Status overview
 
 | Stage | Status | Notes |
@@ -11,15 +21,17 @@
 | Repo + project structure | DONE | `worldmodeling/` is the project root |
 | Python scripts | DONE | All 4 scripts written and tested |
 | Test dataset | DONE | gerrard-hall (100 images + COLMAP) downloaded |
-| Nerfstudio install | NOT DONE | Must be done on Colab (no local GPU) |
+| Gerrard-hall training | DONE | Teammate ran Colab, 73.5 MB splat.ply exported |
+| splat.ply hosted on HuggingFace | DONE | `vcraghav/photowalk-splats` repo, desk scene URL set |
+| Web landing page | DONE | React + Vite + Tailwind + gsplat viewer, builds clean |
+| Browser viewer (gsplat) | DONE | SplatViewer.jsx + SceneViewerModal.jsx working |
+| Nerfstudio install (local) | NOT DONE | Must be done on Colab (no local GPU) |
 | Real scene capture | NOT DONE | Need phone photos — see capture guide below |
-| COLMAP / ns-process-data | NOT DONE | Runs on Colab |
-| Splatfacto training | NOT DONE | Runs on Colab |
-| Splat export + SuperSplat | NOT DONE | After training |
-| Web landing page | DONE | React + Vite + Tailwind, builds clean |
-| Experiments | NOT DONE | Need reconstructed scenes first |
-| Report | IN PROGRESS | Outline + related work drafted |
-| Video script | DONE | 5-min timed script with slide cues |
+| Experiments 1–4 (capture conditions) | NOT DONE | Need reconstructed scenes first |
+| Experiment 5 (DUSt3R comparison) | NOT DONE | Install DUSt3R on Colab, run at 5/10/20 images |
+| Failure taxonomy (Section 6) | IN PROGRESS | Modes defined in outline; need image examples |
+| Report | IN PROGRESS | Outline + related work drafted (new framing applied) |
+| Video script | IN PROGRESS | Needs DUSt3R segment added |
 | Final submission | NOT DONE | Due 2026-05-18 |
 
 ---
@@ -47,12 +59,12 @@
 - Run locally: `cd web && npm run dev` → http://localhost:5173
 
 **Report documents:**
-- `report/outline.md` — full NeurIPS structure with section budgets
-- `report/related_work.md` — draft prose for COLMAP, NeRF, 3DGS, SuperSplat + citations
+- `report/outline.md` — full NeurIPS structure with section budgets; **updated with new research framing** (4 research questions, DUSt3R as Experiment 5, failure taxonomy table)
+- `report/related_work.md` — draft prose for COLMAP, NeRF, 3DGS, DUSt3R, MASt3R + citations; **updated**
 - `report/experiments.md` — auto-generated, will be updated as scenes are reconstructed
 
 **Presentation:**
-- `presentation/video_script.md` — timed 5-min script with slide cues
+- `presentation/video_script.md` — timed 5-min script with slide cues; **needs DUSt3R segment (TODO)**
 
 **Test dataset downloaded:**
 - `scenes/gerrard-hall/gerrard-hall/` — 100 building exterior JPEGs + pre-baked COLMAP sparse reconstruction
@@ -72,7 +84,16 @@ Local machine has **Intel Iris Xe only — no Nvidia GPU**.
 
 ## Next steps (in order)
 
-### 1. Capture real scenes (do this first)
+### 1. Run Experiment 5: DUSt3R vs Full Pipeline (highest priority — novel contribution)
+
+On Colab, install and run DUSt3R on gerrard-hall image subsets (5, 10, 20 images).
+Compare output quality against Splatfacto at same counts. Record qualitative scores.
+```bash
+pip install dust3r
+# Then run DUSt3R inference on subsets — see report/outline.md §3.5
+```
+
+### 2. Capture real scenes (do this next)
 Capture three scenes with your phone:
 
 | Scene | What | Why |
@@ -84,31 +105,31 @@ Capture three scenes with your phone:
 **Capture protocol:** slow arc around the scene, 50–70 photos, 60–80% overlap, bright consistent light.
 Put images in `scenes/<scene_name>/raw/`.
 
-### 2. Validate locally
+### 3. Validate locally
 ```bash
 python scripts/validate_images.py --input scenes/desk_scene/raw
 ```
 
-### 3. Preprocess locally
+### 4. Preprocess locally
 ```bash
 python scripts/preprocess_images.py --input scenes/desk_scene/raw --output scenes/desk_scene/processed --max-size 1920
 ```
 
-### 4. Train on Colab
+### 5. Train on Colab
 - Upload `scenes/desk_scene/processed/` to Google Drive
 - Open Colab notebook (to be created), mount Drive, run pipeline
 - Download exported `.ply`
 
-### 5. Publish on SuperSplat
-- Upload `.ply` to https://playcanvas.com/supersplat/editor
-- Publish and copy viewer URL
-- Paste URL into `web/src/data/scenes.js`
+### 6. Host on HuggingFace + update scenes.js
+- Upload `.ply` to HuggingFace dataset repo (`vcraghav/photowalk-splats`)
+- Copy direct download URL (CORS-enabled)
+- Paste into `web/src/data/scenes.js` → `splat_url` field
 
-### 6. Run experiments
+### 7. Run experiments 1–4
 After at least the desk scene works, capture and reconstruct the other scenes.
 Record results in `experiments.json` (template already at project root).
 
-### 7. Write report
+### 8. Write report
 Use `report/outline.md` as the skeleton.
 Fill in `report/experiments.md` from real results.
 Add screenshots of the viewer and COLMAP point cloud as figures.
