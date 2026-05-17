@@ -1,0 +1,21 @@
+{
+  "model": "Inria_3DGS",
+  "scene": "gerrard-hall",
+  "iterations": 10000,
+  "PSNR": 19.0,
+  "SSIM": 0.0,
+  "LPIPS": 0.0,
+  "training_time_sec": 1455.425,
+  "training_time_min": 24.257,
+  "peak_gpu_gb": 8.938,
+  "num_gaussians": 578669,
+  "ply_file_size_mb": 143.511,
+  "ply_path": "/content/drive/MyDrive/worldmodeling/sota_runs/inria_3dgs/gerrard-hall/point_cloud/iteration_10000/point_cloud.ply",
+  "raw_metrics_file": {
+    "ours_10000": {
+      "SSIM": 0.6825939416885376,
+      "PSNR": 19.377351760864258,
+      "LPIPS": 0.38129132986068726
+    }
+  }
+}
