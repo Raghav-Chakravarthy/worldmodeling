@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { scenes, experiments } from "./data/scenes";
 import SceneViewerModal from "./components/SceneViewerModal";
+import ResultsComparison from "./components/ResultsComparison";
 
 // ── Icons (inline SVG to avoid a dependency) ────────────────────────────────
 const IconCamera = () => (
@@ -45,6 +46,7 @@ function NavBar() {
         <div className="flex gap-6 text-sm text-gray-600">
           <a href="#pipeline" className="hover:text-blue-600 transition-colors">Pipeline</a>
           <a href="#scenes" className="hover:text-blue-600 transition-colors">Scenes</a>
+          <a href="#results" className="hover:text-blue-600 transition-colors">Results</a>
           <a href="#experiments" className="hover:text-blue-600 transition-colors">Experiments</a>
           <a href="#capture" className="hover:text-blue-600 transition-colors">Capture Guide</a>
         </div>
@@ -325,6 +327,7 @@ export default function App() {
       <Hero />
       <Pipeline />
       <Scenes onOpen={setActiveScene} />
+      <ResultsComparison />
       <Experiments />
       <CaptureGuide />
       <Footer />
