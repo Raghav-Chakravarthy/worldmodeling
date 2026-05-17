@@ -1,0 +1,15 @@
+{
+  "model": "Mip_Splatting",
+  "scene": "gerrard-hall",
+  "iterations": 10000,
+  "PSNR": null,
+  "SSIM": null,
+  "LPIPS": null,
+  "training_time_sec": 587.954,
+  "training_time_min": 9.799,
+  "peak_gpu_gb": 16.753,
+  "num_gaussians": 699425,
+  "ply_file_size_mb": 176.257,
+  "ply_path": "/content/drive/MyDrive/worldmodeling/sota_runs/mip_splatting/gerrard-hall_p5k_clean/point_cloud/iteration_10000/point_cloud.ply",
+  "raw_metrics_file": {}
+}

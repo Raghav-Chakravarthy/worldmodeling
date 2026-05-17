@@ -1,0 +1,4 @@
+model,scene,iterations,PSNR,SSIM,LPIPS,training_time_sec,training_time_min,peak_gpu_gb,num_gaussians,ply_file_size_mb,ply_path
+Inria_3DGS,gerrard-hall,10000,19.3773518,0.6825939,0.3812913,1455.425,24.257,8.938,578669,143.511,/content/drive/MyDrive/worldmodeling/sota_runs/inria_3dgs/gerrard-hall/point_cloud/iteration_10000/point_cloud.ply
+Mip_Splatting,gerrard-hall,10000,19.39582061767578,0.6794509291648865,0.3846774697303772,587.954,9.799,16.753,699425,176.257,/content/drive/MyDrive/worldmodeling/sota_runs/mip_splatting/gerrard-hall_p5k_clean/point_cloud/iteration_10000/point_cloud.ply
+Splatfacto,gerrard-hall,10000,20.253320693969727,0.7121075987815857,0.3373890817165375,567.182,9.453,2.214,312426,77.483,/content/drive/MyDrive/worldmodeling/sota_runs/splatfacto/gerrard-hall/exports/splatfacto_10k/splat.ply

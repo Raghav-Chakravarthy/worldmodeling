@@ -1,0 +1,31 @@
+{
+  "model": "Splatfacto",
+  "scene": "gerrard-hall",
+  "iterations": 10000,
+  "PSNR": 20.253320693969727,
+  "SSIM": 0.7121075987815857,
+  "LPIPS": 0.3373890817165375,
+  "training_time_sec": null,
+  "training_time_min": null,
+  "peak_gpu_gb": null,
+  "num_gaussians": 312426,
+  "ply_file_size_mb": 77.483,
+  "ply_path": "/content/drive/MyDrive/worldmodeling/sota_runs/splatfacto/gerrard-hall/exports/splatfacto_10k/splat.ply",
+  "raw_eval_json": {
+    "experiment_name": "gerrard-hall",
+    "method_name": "splatfacto",
+    "checkpoint": "/content/drive/MyDrive/worldmodeling/sota_runs/splatfacto/gerrard-hall/gerrard-hall/splatfacto/2026-05-17_013228/nerfstudio_models/step-000009999.ckpt",
+    "results": {
+      "psnr": 20.253320693969727,
+      "psnr_std": 3.4894723892211914,
+      "ssim": 0.7121075987815857,
+      "ssim_std": 0.11187548190355301,
+      "lpips": 0.3373890817165375,
+      "lpips_std": 0.11525974422693253,
+      "num_rays_per_sec": 90113176.0,
+      "num_rays_per_sec_std": 31731600.0,
+      "fps": 68.69403839111328,
+      "fps_std": 24.189268112182617
+    }
+  }
+}
