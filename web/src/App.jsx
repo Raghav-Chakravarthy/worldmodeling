@@ -2,6 +2,7 @@ import { useState } from "react";
 import { scenes, experiments } from "./data/scenes";
 import SceneViewerModal from "./components/SceneViewerModal";
 import ResultsComparison from "./components/ResultsComparison";
+import ModelPointCloud from "./components/ModelPointCloud";
 
 // ── Icons (inline SVG to avoid a dependency) ────────────────────────────────
 const IconCamera = () => (
@@ -47,6 +48,7 @@ function NavBar() {
           <a href="#pipeline" className="hover:text-blue-600 transition-colors">Pipeline</a>
           <a href="#scenes" className="hover:text-blue-600 transition-colors">Scenes</a>
           <a href="#results" className="hover:text-blue-600 transition-colors">Results</a>
+          <a href="#model-cloud" className="hover:text-blue-600 transition-colors">Model Cloud</a>
           <a href="#experiments" className="hover:text-blue-600 transition-colors">Experiments</a>
           <a href="#capture" className="hover:text-blue-600 transition-colors">Capture Guide</a>
         </div>
@@ -196,8 +198,10 @@ function Scenes({ onOpen }) {
         <h2 className="text-3xl font-bold text-gray-900 mb-2">3DGS Trainer Comparison</h2>
         <p className="text-gray-600 mb-10 text-sm">
           Three open-source 3D Gaussian Splatting implementations, each trained for 10,000 iterations on the
-          same <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">gerrard-hall</code> scene (COLMAP poses + sparse points, Colab T4).
-          Click any card to load the trained <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">.ply</code> directly in the browser.
+          same <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">gerrard-hall</code> scene
+          (COLMAP poses + sparse points, Colab T4). Click any card to load its trained
+          <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">.ply</code> directly in the browser
+          from HuggingFace.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {scenes.map(s => <SceneCard key={s.id} scene={s} onOpen={onOpen} />)}
@@ -328,6 +332,7 @@ export default function App() {
       <Pipeline />
       <Scenes onOpen={setActiveScene} />
       <ResultsComparison />
+      <ModelPointCloud />
       <Experiments />
       <CaptureGuide />
       <Footer />
