@@ -61,3 +61,8 @@ Thumbs.db
 
 # ── Experiment manifest (fill-in manually, not for source control) ───────────
 experiments.json
+
+# -- SOTA runs ───────────────────────────────────────────────────────────────
+sota_run_results/inria_3dgs/
+sota_run_results/mip_splatting/
+sota_run_results/splatfacto/
