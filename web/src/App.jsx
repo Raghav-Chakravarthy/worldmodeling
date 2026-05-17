@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { scenes, experiments } from "./data/scenes";
 import SceneViewerModal from "./components/SceneViewerModal";
+import ResultsComparison from "./components/ResultsComparison";
 
 // ── Icons (inline SVG to avoid a dependency) ────────────────────────────────
 const IconCamera = () => (
@@ -45,6 +46,7 @@ function NavBar() {
         <div className="flex gap-6 text-sm text-gray-600">
           <a href="#pipeline" className="hover:text-blue-600 transition-colors">Pipeline</a>
           <a href="#scenes" className="hover:text-blue-600 transition-colors">Scenes</a>
+          <a href="#results" className="hover:text-blue-600 transition-colors">Results</a>
           <a href="#experiments" className="hover:text-blue-600 transition-colors">Experiments</a>
           <a href="#capture" className="hover:text-blue-600 transition-colors">Capture Guide</a>
         </div>
@@ -126,16 +128,6 @@ function Pipeline() {
   );
 }
 
-function ScoreStars({ score }) {
-  return (
-    <span className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map(n => (
-        <span key={n} className={n <= score ? "text-yellow-400" : "text-gray-300"}>★</span>
-      ))}
-    </span>
-  );
-}
-
 function SceneCard({ scene, onOpen }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
@@ -170,18 +162,13 @@ function SceneCard({ scene, onOpen }) {
         </div>
         <p className="text-sm text-gray-600 leading-relaxed">{scene.description}</p>
         <div className="grid grid-cols-2 gap-1 text-xs text-gray-500">
-          <span>Images: <strong className="text-gray-800">{scene.images}</strong></span>
-          <span>Texture: <strong className="text-gray-800">{scene.texture}</strong></span>
-          <span>Lighting: <strong className="text-gray-800">{scene.lighting}</strong></span>
+          <span>PSNR ↑: <strong className="text-gray-800">{scene.psnr?.toFixed(2)}</strong></span>
+          <span>SSIM ↑: <strong className="text-gray-800">{scene.ssim?.toFixed(3)}</strong></span>
+          <span>LPIPS ↓: <strong className="text-gray-800">{scene.lpips?.toFixed(3)}</strong></span>
           <span>Size: <strong className="text-gray-800">{scene.fileSizeMb > 0 ? `${scene.fileSizeMb} MB` : "N/A"}</strong></span>
+          <span>Gaussians: <strong className="text-gray-800">{scene.numGaussians?.toLocaleString()}</strong></span>
+          <span>Train: <strong className="text-gray-800">{scene.trainTimeMin ? `${scene.trainTimeMin} min` : "N/A"}</strong></span>
         </div>
-        <div className="flex items-center gap-2">
-          <ScoreStars score={scene.score} />
-          <span className="text-xs text-gray-500">quality score</span>
-        </div>
-        {scene.artifacts && (
-          <p className="text-xs text-gray-400 italic">Artifacts: {scene.artifacts}</p>
-        )}
         <div className="mt-auto pt-2">
           {scene.splat_url ? (
             <button
@@ -206,10 +193,11 @@ function Scenes({ onOpen }) {
   return (
     <section id="scenes" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Reconstructed Scenes</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">3DGS Trainer Comparison</h2>
         <p className="text-gray-600 mb-10 text-sm">
-          Three scenes chosen to span the difficulty spectrum and expose reconstruction failure modes.
-          Click any scene to load its 3D Gaussian Splat reconstruction directly in the browser.
+          Three open-source 3D Gaussian Splatting implementations, each trained for 10,000 iterations on the
+          same <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">gerrard-hall</code> scene (COLMAP poses + sparse points, Colab T4).
+          Click any card to load the trained <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">.ply</code> directly in the browser.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {scenes.map(s => <SceneCard key={s.id} scene={s} onOpen={onOpen} />)}
@@ -339,6 +327,7 @@ export default function App() {
       <Hero />
       <Pipeline />
       <Scenes onOpen={setActiveScene} />
+      <ResultsComparison />
       <Experiments />
       <CaptureGuide />
       <Footer />
