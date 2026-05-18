@@ -2,17 +2,6 @@ import { useMemo, useState } from "react";
 
 const MODELS = [
   {
-    id: "splatfacto",
-    name: "Splatfacto",
-    psnr: 20.25,
-    ssim: 0.712,
-    lpips: 0.337,
-    trainTimeMin: 9.45,
-    peakGpuGb: 2.21,
-    numGaussians: 312426,
-    fileSizeMb: 77.5,
-  },
-  {
     id: "inria_3dgs",
     name: "Inria 3DGS",
     psnr: 19.38,
@@ -33,6 +22,17 @@ const MODELS = [
     peakGpuGb: 16.75,
     numGaussians: 699425,
     fileSizeMb: 176.3,
+  },
+  {
+    id: "splatfacto",
+    name: "Splatfacto",
+    psnr: 20.25,
+    ssim: 0.712,
+    lpips: 0.337,
+    trainTimeMin: 9.45,
+    peakGpuGb: 2.21,
+    numGaussians: 312426,
+    fileSizeMb: 77.5,
   },
 ];
 
