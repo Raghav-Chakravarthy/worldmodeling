@@ -1,5 +1,5 @@
 // Three open-source 3D Gaussian Splatting trainers, each trained for 10,000
-// iterations on the gerrard-hall scene (COLMAP poses + sparse points, Colab T4).
+// iterations on the gerrard-hall scene (COLMAP poses + sparse points, Colab A100).
 // PLY files are streamed from a public HuggingFace dataset so teammates can
 // `git clone` + `npm run dev` without needing the ~380 MB of local .ply files.
 // To re-host: run `python scripts/upload_plys_to_hf.py --execute`, then set
@@ -8,24 +8,6 @@ const HF_REPO = "pjain125/photowalk-splats";
 const HF_BASE = `https://huggingface.co/datasets/${HF_REPO}/resolve/main`;
 
 export const scenes = [
-  {
-    id: "splatfacto",
-    title: "Splatfacto (Nerfstudio)",
-    description: "Production-oriented 3DGS trainer wrapped in Nerfstudio. Our baseline — what most practitioners actually run.",
-    difficulty: "Baseline",
-    difficultyColor: "text-blue-600 bg-blue-50",
-    psnr: 20.25,
-    ssim: 0.712,
-    lpips: 0.337,
-    numGaussians: 312426,
-    trainTimeMin: 9.45,
-    peakGpuGb: 2.21,
-    fileSizeMb: 77.5,
-    fps: 68.7,
-    splat_url: `${HF_BASE}/splatfacto_10k.ply`,
-    demo_label: "Splatfacto · Nerfstudio 1.1.5 · 10k iters on gerrard-hall · PSNR 20.25 / SSIM 0.71 / LPIPS 0.34",
-    thumbnail: null,
-  },
   {
     id: "inria_3dgs",
     title: "Inria 3DGS",
@@ -60,6 +42,24 @@ export const scenes = [
     fps: null,
     splat_url: `${HF_BASE}/mip_splatting_output.ply`,
     demo_label: "Mip-Splatting (Yu et al., 2024) · 10k iters on gerrard-hall · PSNR 19.40 / SSIM 0.68 / LPIPS 0.38",
+    thumbnail: null,
+  },
+  {
+    id: "splatfacto",
+    title: "Splatfacto (Nerfstudio)",
+    description: "Production-oriented 3DGS trainer wrapped in Nerfstudio. Our baseline — what most practitioners actually run.",
+    difficulty: "Baseline",
+    difficultyColor: "text-blue-600 bg-blue-50",
+    psnr: 20.25,
+    ssim: 0.712,
+    lpips: 0.337,
+    numGaussians: 312426,
+    trainTimeMin: 9.45,
+    peakGpuGb: 2.21,
+    fileSizeMb: 77.5,
+    fps: 68.7,
+    splat_url: `${HF_BASE}/splatfacto_10k.ply`,
+    demo_label: "Splatfacto · Nerfstudio 1.1.5 · 10k iters on gerrard-hall · PSNR 20.25 / SSIM 0.71 / LPIPS 0.34",
     thumbnail: null,
   },
 ];

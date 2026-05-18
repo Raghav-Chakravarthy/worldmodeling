@@ -199,7 +199,7 @@ function Scenes({ onOpen }) {
         <p className="text-gray-600 mb-10 text-sm">
           Three open-source 3D Gaussian Splatting implementations, each trained for 10,000 iterations on the
           same <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">gerrard-hall</code> scene
-          (COLMAP poses + sparse points, Colab T4). Click any card to load its trained
+          (COLMAP poses + sparse points, Colab A100). Click any card to load its trained
           <code className="px-1 py-0.5 bg-gray-100 rounded text-xs">.ply</code> directly in the browser
           from HuggingFace.
         </p>
