@@ -1,5 +1,5 @@
 // Three open-source 3D Gaussian Splatting trainers, each trained for 10,000
-// iterations on the gerrard-hall scene (COLMAP poses + sparse points, Colab T4).
+// iterations on the gerrard-hall scene (COLMAP poses + sparse points, Colab A100).
 // PLY files are streamed from a public HuggingFace dataset so teammates can
 // `git clone` + `npm run dev` without needing the ~380 MB of local .ply files.
 // To re-host: run `python scripts/upload_plys_to_hf.py --execute`, then set

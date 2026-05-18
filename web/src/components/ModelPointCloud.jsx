@@ -417,7 +417,7 @@ export default function ModelPointCloud() {
         <div className="flex flex-wrap items-baseline justify-between gap-3 mb-2">
           <h2 className="text-3xl font-bold text-gray-900">SotA Model Comparison</h2>
           <span className="text-xs text-gray-500">
-            gerrard-hall · 10,000 iterations · Colab T4
+            gerrard-hall · 10,000 iterations · Colab A100
           </span>
         </div>
         <p className="text-gray-600 mb-8 text-sm max-w-3xl leading-relaxed">
@@ -457,7 +457,7 @@ export default function ModelPointCloud() {
           <div className="rounded-xl border border-rose-200 bg-rose-50/60 p-4">
             <p className="font-semibold text-rose-800 mb-1">VRAM ceiling · Mip-Splatting</p>
             <p className="text-rose-900/80 leading-relaxed">
-              Trains fast (9.8 min) but peaks at 16.75 GB — at the edge of a free T4. Its anti-aliasing benefit
+              Trains fast (9.8 min) but peaks at 16.75 GB — ~7.6× Splatfacto's footprint. Its anti-aliasing benefit
               shows up under view-zoom changes, not in raw PSNR at 10k iters.
             </p>
           </div>

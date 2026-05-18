@@ -30,7 +30,7 @@ const METRICS = [
     label: "Training time",
     unit: " min",
     direction: "lower",
-    description: "Wall-clock to reach 10,000 iterations on a single Colab T4.",
+    description: "Wall-clock to reach 10,000 iterations on a single Colab A100.",
     decimals: 2,
   },
   {
@@ -175,7 +175,7 @@ function Takeaways() {
     },
     {
       title: "Mip-Splatting trades VRAM for anti-aliasing",
-      body: `Trains as fast as Splatfacto (${mip.trainTimeMin} min) but peaks at ${mip.peakGpuGb} GB VRAM — well above a free T4 and ~7.6× Splatfacto. Quality at 10k iters is comparable to Inria; its anti-aliasing benefit shows up under view-zoom changes, not in raw PSNR.`,
+      body: `Trains as fast as Splatfacto (${mip.trainTimeMin} min) but peaks at ${mip.peakGpuGb} GB VRAM — ~7.6× Splatfacto. Quality at 10k iters is comparable to Inria; its anti-aliasing benefit shows up under view-zoom changes, not in raw PSNR.`,
     },
     {
       title: "More Gaussians ≠ better images",
@@ -237,7 +237,7 @@ export default function ResultsComparison() {
         <div className="flex flex-wrap items-baseline justify-between gap-4 mb-2">
           <h2 className="text-3xl font-bold text-gray-900">Results Comparison</h2>
           <span className="text-xs text-gray-500">
-            gerrard-hall · 10,000 iterations · single Colab T4 (16 GB)
+            gerrard-hall · 10,000 iterations · single Colab A100 (40 GB)
           </span>
         </div>
         <p className="text-gray-600 mb-8 text-sm max-w-3xl">
@@ -256,7 +256,7 @@ export default function ResultsComparison() {
           <HeadlineStat
             label="Fastest training"
             value={`${splat.trainTimeMin} min`}
-            sublabel={`${splat.title.split(" ")[0]} on Colab T4 @ 10k iters`}
+            sublabel={`${splat.title.split(" ")[0]} on Colab A100 @ 10k iters`}
             accent="text-blue-700"
           />
           <HeadlineStat
